@@ -33,12 +33,15 @@ class DeployFolderOrZipTool(Tool):
             
             project_name = self.runtime.credentials.get("project_name", "")
             
+           
+            filename = zip_file.filename
+            
             # Validate file is a ZIP file
-            if not zip_file.get('filename', '').lower().endswith('.zip'):
+            if not filename.lower().endswith('.zip'):
                 yield self.create_text_message("❌ Only ZIP files are supported for deployment.")
                 return
             
-            yield self.create_text_message(f"🚀 Starting deployment of ZIP file: {zip_file.get('filename')}")
+            yield self.create_text_message(f"🚀 Starting deployment of ZIP file: {filename}")
             yield self.create_text_message(f"📋 Environment: {environment}")
             
             # Download and save the file temporarily
@@ -46,7 +49,7 @@ class DeployFolderOrZipTool(Tool):
             
             try:
                 # Initialize deployment helper
-                deployer = EdgeOneDeployer(api_token, project_name)
+                deployer: EdgeOneDeployer = EdgeOneDeployer(api_token, project_name)
                 
                 # Deploy
                 result_url = deployer.deploy(zip_path, environment)
@@ -59,7 +62,7 @@ class DeployFolderOrZipTool(Tool):
                     "url": result_url,
                     "environment": environment,
                     "type": "zip_deployment",
-                    "message": f"ZIP file {zip_file.get('filename')} deployed successfully to EdgeOne Pages"
+                    "message": f"ZIP file {filename} deployed successfully to EdgeOne Pages"
                 })
             finally:
                 # Cleanup temporary file
@@ -75,10 +78,11 @@ class DeployFolderOrZipTool(Tool):
                 "type": "zip_deployment"
             })
     
-    def _download_file(self, file_info: Dict) -> str:
-        """Download file from Dify to temporary location"""
-        file_url = file_info.get('url')
-        filename = file_info.get('filename', 'upload.zip')
+    def _download_file(self, file_obj) -> str:
+        """Download file from Dify file object to temporary location"""
+        # 直接访问文件对象的属性
+        file_url = file_obj.url
+        filename = file_obj.filename or 'upload.zip'
         
         if not file_url:
             raise Exception("File URL not provided")
