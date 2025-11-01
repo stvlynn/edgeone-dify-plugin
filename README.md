@@ -2,7 +2,7 @@
 
 **Author:** [Steven Lynn](https://github.com/stvlynn)  
 **Type:** Tool Plugin  
-**Version:** 0.0.1  
+**Version:** 0.0.2  
 **Repository:** https://github.com/stvlynn/edgeone-dify-plugin
 
 ## Description
@@ -181,7 +181,6 @@ A: Yes, specify an existing project name to update deployments.
 - **Documentation**: [EdgeOne Pages Documentation](https://edgeone.ai/products/pages)
 - **API Reference**: [EdgeOne API Documentation](https://edgeone.ai/document/177158578324279296)
 - **Issues**: Report bugs and feature requests via GitHub issues
-- **Community**: Join EdgeOne community forums for additional support
 
 ## License
 
